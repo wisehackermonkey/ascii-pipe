@@ -1,0 +1,10 @@
+{
+  "name": "ascii-pipe",
+  "version": "1.0.0",
+  "description": "a ascii art conconcurent pipe framework for javascript",
+  "main": "./src/ascii-pipe.js",
+  "repository": "https://www.github.com/wisehackermonkey/ascii-pipe.git",
+  "author": "wisehackermnokey",
+  "license": "MIT",
+  "private": false
+}
