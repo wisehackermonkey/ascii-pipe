@@ -13,11 +13,28 @@
 
 
 
+# Example
+```javascript
+        |  fn5       =>|
+Input =>|  fn1=>| fn8=>|=> out
+        |  fn7=>|        
+```
 
-
-
-
-
+Expanding and constricting pipe
+```javascript 
+        |fn5     =>|f2=>|
+Input =>|fn1=>fn8=>|f3=>|=>out
+        
+```
+# parallel example
+```javascript 
+        |  fn5       =>|
+Input =>|  fn1=>| fn8=>| 
+        |  fn7=>|    =>| => out
+        |  fn5       =>|
+Input2=>|  fn1=>| fn8=>|
+        |  fn7=>|
+```
 
 
 # Quick start
