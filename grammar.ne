@@ -1,16 +1,20 @@
-main -> (statement "\n"):+
-statement -> "foo" | "bar"
 
-#input =>|    fn1     =>|    fn8     =>|=>    out
-main -> (block cell block)
-main -> (block cell )
-main -> (cell  block)
+main -> function arrow cells block arrow function 
+main -> cells
 
-cell -> function
-cell -> function arrow 
-cell -> arrow function
 
-blank -> [\t]|[\s]{4}
+cells -> block cell block
+
+cells -> (cell block):*
+cells -> (block cell):*
+#cells -> cell block 
+#cells -> cell
+
+#cell -> (function arrow block):*
+cell -> (block function arrow ):*
+cell -> (function arrow ):*
+
+blank -> [\t]|[\s\s\s\s]
 block -> [|]
-arrow -> \=\>
-function -> [a-zA-Z0-9_]:+
+arrow -> "=>"
+function -> ([a-zA-Z0-9_]):*
