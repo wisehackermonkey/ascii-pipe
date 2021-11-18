@@ -13,6 +13,7 @@
   "private": false,
   "dependencies": {
     "acorn-loose": "^8.2.1",
-    "moo": "^0.5.1"
+    "moo": "^0.5.1",
+    "nearley": "^2.20.1"
   }
 }

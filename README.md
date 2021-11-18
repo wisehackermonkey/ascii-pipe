@@ -50,10 +50,83 @@ yarn start
 
 
 
+# the grammer
+```bash
+nearleyc grammar.ne -o grammar.js
+```
+```
+main -> function arrow cells block arrow function 
+main -> cells
 
 
+cells -> block cell block
+
+cells -> (cell block):*
+cells -> (block cell):*
+#cells -> cell block 
+#cells -> cell
+
+cell -> (function arrow block):*
+cell -> (block function arrow ):*
+cell -> (function arrow ):*
+
+blank -> [\t]|[\s\s\s\s]
+block -> [|]
+arrow -> "=>"
+function -> ([a-zA-Z0-9_]):*
+```
+### optimize for more strict
+```python
+
+main -> function arrow cells block arrow function 
+main -> cells
 
 
+#cells -> block cell block
+
+cells -> (cell block):*
+cells -> (block cell):*
+#cells -> cell block 
+#cells -> cell
+
+#cell -> (function arrow block):*
+cell -> (block function arrow ):*
+cell -> (function arrow ):*
+
+blank -> [\t]|[\s\s\s\s]
+block -> [|]
+arrow -> "=>"
+function -> ([a-zA-Z0-9_]):*
+```
+```
+@builtin "whitespace.ne"
+
+
+main -> function arrow cells block arrow function  
+main -> cells
+
+
+#cells -> block cell block
+
+cells -> (cell block):*
+cells -> (block cell):*
+#cells -> cell block 
+#cells -> cell
+
+#cell -> (function arrow block):*
+cell -> (block function arrow ):*
+cell -> (function arrow ):*
+
+_  -> wschar:* {% function(d) {return null;} %}
+__ -> wschar:+ {% function(d) {return null;} %}
+
+wschar -> [ \t\n\v\f] {% id %}
+
+block -> [|]
+arrow -> "=>"
+function -> ([a-zA-Z0-9_]):*
+function -> _ ([a-zA-Z0-9_]) 
+```
 
 
 
@@ -145,6 +218,8 @@ yarn run dev
 ### [Tokenizers - nearley.js - JS Parsing Toolkit](https://nearley.js.org/docs/tokenizers)
 ### [Moo (no-context/moo): Optimised tokenizer/lexer generator! 🐄 Uses /y for performance. ](https://github.com/no-context/moo)
 ### [AST explorer](https://astexplorer.net/)
+### [Nearley Parser Playground | Parse Grammars Online, From The Comfort Of Your Home!](https://omrelli.ug/nearley-playground/)
+---
 ### UNUSED but cool [acornjs/acorn: A small, fast, JavaScript-based JavaScript parser](https://github.com/acornjs/acorn)
 ### also cool and unused [acorn/acorn-loose at master · acornjs/acorn](https://github.com/acornjs/acorn/tree/master/acorn-loose)
 ### https://www.digitalocean.com/community/tutorials/js-traversing-ast

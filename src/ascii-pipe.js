@@ -13,6 +13,7 @@ let tokenNames = {
 
 const lexer = moo.compile({
     newline: { match: /(?:\r\n?|\n)+/, lineBreaks: true },
+    blank: /[\t]|[\s]{4}/,
     arrow: /(?:\=\>)/,
     block: /[|]/,//https://regexr.com/69ouf
     out: /(?:\=\>[\t]|[\s]{4})/,
@@ -64,9 +65,17 @@ const printTokenList = (x) => x.map((x) => console.log(x.type))
 
 const locFirstCell = (x) => x.indexOf("|")
 
-
+const splitRowsCols =(x)=>{
+    lines = x.split("newline")
+    lines = lines.x.map()
+    longest = 
+    result = []
+    return result
+}
 let examples = [
     "",
+    `square|fn8|
+square|fn8|`,
     `
 Input|fn8|=>|
 fn|f3`,
