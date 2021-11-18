@@ -6,5 +6,13 @@
   "repository": "https://www.github.com/wisehackermonkey/ascii-pipe.git",
   "author": "wisehackermnokey",
   "license": "MIT",
-  "private": false
+  "scripts": {
+    "start": "node ./src/ascii-pipe.js",
+    "dev": "nodemon start"
+  },
+  "private": false,
+  "dependencies": {
+    "acorn-loose": "^8.2.1",
+    "moo": "^0.5.1"
+  }
 }

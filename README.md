@@ -94,14 +94,6 @@ yarn start
 ```bash
 yarn build
 ```
-## Run Tests
-```bash
-yarn test
-```
-## Run CI
-```bash
-yarn ci
-```
 
 
 
@@ -133,6 +125,7 @@ yarn ci
 # Deveopment
 ### 
 ```bash
+yarn run dev
 ```
 
 
@@ -149,11 +142,12 @@ yarn ci
  
 ---
 # Links
-### 
-### 
-### 
-### 
-### 
+### [Tokenizers - nearley.js - JS Parsing Toolkit](https://nearley.js.org/docs/tokenizers)
+### [Moo (no-context/moo): Optimised tokenizer/lexer generator! 🐄 Uses /y for performance. ](https://github.com/no-context/moo)
+### [AST explorer](https://astexplorer.net/)
+### UNUSED but cool [acornjs/acorn: A small, fast, JavaScript-based JavaScript parser](https://github.com/acornjs/acorn)
+### also cool and unused [acorn/acorn-loose at master · acornjs/acorn](https://github.com/acornjs/acorn/tree/master/acorn-loose)
+### https://www.digitalocean.com/community/tutorials/js-traversing-ast
 
 
 
