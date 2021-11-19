@@ -128,8 +128,11 @@ function -> ([a-zA-Z0-9_]):*
 function -> _ ([a-zA-Z0-9_]) 
 ```
 
-
-
+### how to dev grammer
+```bash
+##yarn run dev-grammer
+nodemon -w grammar.ne -w grammerTest.js  --exec './node_modules/.bin/nearleyc grammar.ne -o grammar.js& node grammerTest.js'
+```
 # Summary
 ### -  *[Quick start](#Quick-start)*
 ### -  *[Installation](#Installation)*

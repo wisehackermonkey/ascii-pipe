@@ -8,7 +8,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node ./src/ascii-pipe.js",
-    "dev": "nodemon start"
+    "dev": "nodemon start",
+    "dev-grammer": "nodemon -w grammar.ne -w grammerTest.js  --exec './node_modules/.bin/nearleyc grammar.ne -o grammar.js& node grammerTest.js'"
+
   },
   "private": false,
   "dependencies": {

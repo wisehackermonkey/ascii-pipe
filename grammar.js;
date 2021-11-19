@@ -5,7 +5,7 @@ function id(x) { return x[0]; }
 var grammar = {
     Lexer: undefined,
     ParserRules: [
-    {"name": "main", "symbols": ["function", "arrow", "cells", "block", "arrow", "function"], "postprocess": (d)=>{return [d[0],d[2],d[2],d[5]]}},
+    {"name": "main", "symbols": ["function", "arrow", "cells", "block", "arrow", "function"]},
     {"name": "main", "symbols": ["cells"]},
     {"name": "cells", "symbols": ["block", "cell", "block"]},
     {"name": "cells$ebnf$1", "symbols": []},
@@ -26,13 +26,13 @@ var grammar = {
     {"name": "cell", "symbols": ["cell$ebnf$2"]},
     {"name": "blank", "symbols": [/[\t]/]},
     {"name": "blank", "symbols": [/[\s\s\s\s]/]},
-    {"name": "block", "symbols": [/[|]/], "postprocess": (d)=>{return "block"}},
+    {"name": "block", "symbols": [/[|]/]},
     {"name": "arrow$string$1", "symbols": [{"literal":"="}, {"literal":">"}], "postprocess": function joiner(d) {return d.join('');}},
-    {"name": "arrow", "symbols": ["arrow$string$1"], "postprocess": (d)=>{return "arrow"}},
+    {"name": "arrow", "symbols": ["arrow$string$1"]},
     {"name": "function$ebnf$1", "symbols": []},
     {"name": "function$ebnf$1$subexpression$1", "symbols": [/[a-zA-Z0-9_]/]},
     {"name": "function$ebnf$1", "symbols": ["function$ebnf$1", "function$ebnf$1$subexpression$1"], "postprocess": function arrpush(d) {return d[0].concat([d[1]]);}},
-    {"name": "function", "symbols": ["function$ebnf$1"], "postprocess": (d)=> {return d.join("").replaceAll(",","")}}
+    {"name": "function", "symbols": ["function$ebnf$1"]}
 ]
   , ParserStart: "main"
 }
