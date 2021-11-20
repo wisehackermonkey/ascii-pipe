@@ -156,7 +156,7 @@ experiment with newline blocks
 ```
 main -> lines
 
-#lines -> newline line
+lines -> line newline line 
 lines -> (line newline):+
 lines -> line
 lines -> newline
