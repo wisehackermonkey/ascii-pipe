@@ -40,7 +40,7 @@ const printJson = (x) => { console.log(JSON.stringify(x)); return x; }
 //     return x + " harry"
 //     }else{
 //         return x + " ron"
-        
+
 //     }
 // }
 
@@ -86,11 +86,22 @@ block = async (pipes) => {
 }
 
 
-let fn1 = (x)=> x + "<a>fn1</a>"
-let fn5 = (x)=> x + "<a>fn5</a>"
-let fn6 = (x)=> x + "<a>fn6</a>"
-let fn8 = (x)=> x + "<a>fn8</a>"
-let fn7 = (x)=> x + "<a>fn7</a>"
+let fn1 = (x) => x + "<a>fn1</a>"
+let fn5 = (x) => x + "<a>fn5</a>"
+let fn6 = (x) => x + "<a>fn6</a>"
+let fn8 = (x) => x + "<a>fn8</a>"
+let fn7 = (x) => x + "<a>fn7</a>"
+
+//example of options for a function
+const fn4 = (x, argument = false) => {
+    if (argument) {
+        return x + " harry"
+    } else {
+        return x + " ron"
+
+    }
+}
+
 
 // Input = "<markdown doc data>"
 
@@ -99,24 +110,37 @@ let fn7 = (x)=> x + "<a>fn7</a>"
 // Input =>|  fn1=> fn8=>|   =>| 
 //         |  fn7            =>|     => out
 
-
-//         |  fn5,                         =>|
-//         |  fn6                          =>|
-// Input =>|  fn1(eval("works",true))=> fn8=>|   =>| 
-//         |  fn7                          =>|     => out
-
 run = async (input) => {
 
-    let subPipe = ()=>pipe(input, fn1, fn8)
-    
+    let subPipe = () => pipe(input, fn1, fn8)
+
     let result = await block([
         [input, fn5],
         [input, fn6],
-        [input,subPipe],
+        [input, subPipe],
         [input, fn7]
     ]);
     console.log(result)
-    pipe(result,combindOutput, printJson);
+    pipe(result, combindOutput, printJson);
+};
+
+//         |  fn5,                               =>|
+//         |  fn6                                =>|
+// Input =>|  fn1(eval("works",true))=> fn8=>|   =>| 
+//         |  fn7  => fn4(true)                  =>|     => out
+
+run = async (input) => {
+
+    let subPipe = () => pipe(input, fn1, fn8)
+
+    let result = await block([
+        [input, fn5],
+        [input, fn6],
+        [input, subPipe],
+        [input, fn7,[fn4,true]]
+    ]);
+    console.log(result)
+    pipe(result, combindOutput, printJson);
 };
 
 
