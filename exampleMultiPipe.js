@@ -110,19 +110,19 @@ const fn4 = (x, argument = false) => {
 // Input =>|  fn1=> fn8=>|   =>| 
 //         |  fn7            =>|     => out
 
-run = async (input) => {
+// run = async (input) => {
 
-    let subPipe = () => pipe(input, fn1, fn8)
+//     let subPipe = () => pipe(input, fn1, fn8)
 
-    let result = await block([
-        [input, fn5],
-        [input, fn6],
-        [input, subPipe],
-        [input, fn7]
-    ]);
-    console.log(result)
-    pipe(result, combindOutput, printJson);
-};
+//     let result = await block([
+//         [input, fn5],
+//         [input, fn6],
+//         [input, subPipe],
+//         [input, fn7]
+//     ]);
+//     console.log(result)
+//     pipe(result, combindOutput, printJson);
+// };
 
 //         |  fn5,                               =>|
 //         |  fn6                                =>|
