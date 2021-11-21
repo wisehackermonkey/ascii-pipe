@@ -5,7 +5,7 @@ function id(x) { return x[0]; }
 var grammar = {
     Lexer: undefined,
     ParserRules: [
-    {"name": "main", "symbols": ["function", "arrow", "cells", "block", "arrow", "function"], "postprocess": (d)=>{return [d[0][0],d[2],d[2],d[5][0]]}},
+    {"name": "main", "symbols": ["function", "arrow", "cells", "block", "arrow", "function"]},
     {"name": "main", "symbols": ["cells"]},
     {"name": "cells$ebnf$1", "symbols": []},
     {"name": "cells$ebnf$1$subexpression$1", "symbols": ["cell", "block"]},

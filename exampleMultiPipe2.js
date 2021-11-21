@@ -1,4 +1,5 @@
 
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 const nearley = require("nearley");
 const grammar = require("./grammar.js");
@@ -11,7 +12,7 @@ const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
 const print = (x) => { console.log(x); return x; }
 // const printJson = (x) => { console.log(JSON.stringify(x)); return x; }
 const printJson = (x) => {
-    if (typeof (x) === "object") { console.log(JSON.stringify(x, null, 2)) } else {
+    if (typeof (x) === "object") { console.log(JSON.stringify(x)) } else {
         console.log(x)
     }
     ; return x;
@@ -72,7 +73,7 @@ const matchFns = (fnNames, fns) => {
 const combindOutput = (input) => input.join(", ")
 const astToStandardArrayFormat = (ast) => {
 
-    fnNames = ast.slice(1,-1)
+    fnNames = ast.slice(1, -1)
 
     let result = [ast[0], fnNames, ast[ast.length - 1]]
     return result
@@ -251,14 +252,21 @@ run3 = async () => {
 
         }
     }
-
-    let input = "<markdown doc data>"
+    const guessAge = async (name) => {
+        const response = await fetch(`https://api.agify.io/?name=${await name}`)
+        const body = await response.json();
+        return body
+    }
+    let input = "michael"
     let output = "what?"
 
-    let DSLString = "input=>|fn5=>|=>output"
- 
+    // let DSLString = "input=>|fn5=>|=>output"
+
+    let DSLString = "input=>|guessAge=>|=>output"
 
     let result = pipe(DSLString, parse, printJson, filtertypes, printJson,astToStandardArrayFormat,printJson, astToPipeArgs, printJson, convertToAsciiPipe, print)
+    // let result = pipe(DSLString, parse, filtertypes, astToStandardArrayFormat, astToPipeArgs, convertToAsciiPipe, print)
+
     eval(result)
 
     console.log(await asciipipe())
