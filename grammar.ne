@@ -1,4 +1,4 @@
-main -> function arrow   cells   block arrow function {%(d)=>{return [d[0][0],d[2],d[2],d[5][0]]}  %}
+main -> function arrow   cells   block arrow function  
 main -> cells
 
 

@@ -9,13 +9,13 @@
   "scripts": {
     "start": "node ./src/ascii-pipe.js",
     "dev": "nodemon start",
-    "dev-grammer": "nodemon -w grammar.ne -w grammerTest.js  --exec './node_modules/.bin/nearleyc grammar.ne -o grammar.js& node grammerTest.js'"
-
+    "dev-grammer": "nodemon -w grammar.ne -w grammerTest.js  --exec './node_modules/.bin/nearleyc grammar.ne -o grammar.js'"
   },
   "private": false,
   "dependencies": {
     "acorn-loose": "^8.2.1",
     "moo": "^0.5.1",
-    "nearley": "^2.20.1"
+    "nearley": "^2.20.1",
+    "node-fetch": "^3.1.0"
   }
 }
