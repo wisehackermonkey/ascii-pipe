@@ -168,6 +168,9 @@ newline -> "\n"
 ```bash
 ##yarn run dev-grammer
 nodemon -w grammar.ne -w grammerTest.js  --exec './node_modules/.bin/nearleyc grammar.ne -o grammar.js& node grammerTest.js'
+
+nodemon -w grammar.ne -w exampleMultiPipe2.js  --exec './node_modules/.bin/nearleyc grammar.ne -o grammar.js& node exampleMultiPipe2.js'
+
 ```
 # Summary
 ### -  *[Quick start](#Quick-start)*
