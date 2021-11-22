@@ -280,7 +280,7 @@ let run4 = async () => {
         return new Promise((resolve, failed) => {
             setTimeout(() => {
                 console.log("db write: Sucessfull")
-
+                print(apiResponse)
                 resolve(apiResponse)
             }, 3000)
         })
