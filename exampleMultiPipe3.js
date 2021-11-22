@@ -1,14 +1,27 @@
 
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const moo = require("moo");
 
-const nearley = require("nearley");
-const grammar = require("./grammar.js");
 // pipe(input object, <function or >,[<fn>, <option data>])
 // this returns result of all functions running in a pipe
 const pipe = (firstValue, ...fns) => [...fns].reduce((v, fn) => { if (Array.isArray(fn)) { if (fn.length >= 2) { return fn[0](v, fn[1]) } } return fn(v) }, firstValue)
 
-// Create a Parser object from our grammar.
-const parser = new nearley.Parser(nearley.Grammar.fromCompiled(grammar));
+
+const lexer = moo.compile({
+    newline: { match: /(?:\r\n?|\n)+/, lineBreaks: true },
+    blank: /[\t]|[\s]{4}/,
+    arrow: /(?:\=\>)/,
+    block: /[|]/,//https://regexr.com/69ouf
+    out: /(?:\=\>[\t]|[\s]{4})/,
+    // id:{ match: / (?:\=\>\||\=\>|[\|]|[\t]|[\s]{4}|[\s]|\w+|\n)/, lineBreaks: true },
+    function_name: /[a-zA-Z0-9_]+/,
+    // word: /[a-z]+/,
+    // times:  /\*|x/
+});
+
+
+const listTokenTypes = (x) => x.map(x => ({ type: x.type, value: x.text }))
+
 const print = (x) => { console.log(x); return x; }
 // const printJson = (x) => { console.log(JSON.stringify(x)); return x; }
 const printJson = (x) => {
@@ -33,7 +46,20 @@ const filtertypes = (x) => {
     })
 }
 
-const parse = (x) => { parser.feed(x); return parser.results[0]; }
+const parse = (x) => {
+
+    lexer.reset(x)
+    let tokens = []
+    let currentToken = lexer.next()
+    while (currentToken) {
+
+        tokens.push(currentToken)
+        currentToken = lexer.next()
+    }
+
+    return pipe(tokens, listTokenTypes)
+
+}
 const uneque = (x) => { return [... new Set(x)] }
 const fnsToDict = (fns) => {
     let result = {}
@@ -172,7 +198,7 @@ let convertToAsciiPipe = (formatedAst) => {
     // let functionArrays = fns.map((x)=>{
     //     return [${input}, ${fns.join(",")}]
     // }) 
-        // [${input}, ${fns.join(",")}]
+    // [${input}, ${fns.join(",")}]
     // ]
 
     evalString = `
@@ -193,7 +219,7 @@ let convertToAsciiPipe = (formatedAst) => {
 }
 
 const asciipipe = async (dslString) => {
-    return pipe(dslString, parse,printJson, filtertypes, astToStandardArrayFormat, astToPipeArgs, convertToAsciiPipe, print);
+    return await pipe(dslString, parse, printJson, filtertypes, astToStandardArrayFormat, astToPipeArgs, convertToAsciiPipe, print);
 }
 // let subPipe = () => pipe(input, fn1, fn8)
 
@@ -288,17 +314,20 @@ let run4 = async () => {
         await (await fetch(`https://api.agify.io/?name=${await name}`)).json()
     const writeToDb = async (apiResponse) => {
         console.log("Start to db write")
-        return new Promise((resolve,failed)=>{
+        return new Promise((resolve, failed) => {
             setTimeout(() => {
                 console.log("db write: Sucessfull")
-                 
-                resolve( apiResponse)
+
+                resolve(apiResponse)
             }, 3000)
         })
-       
+
+    }
+    let fn7 = async(x) => {
+        return print(x)
     }
 
-    eval(await asciipipe(`name=>|writeToDb=>|guessAge=>|=>response`))
+    eval(await asciipipe(`name=>|writeToDb=>|guessAge=>|fn7=>|=>response`))
     await asciipipeRun()
     console.log(response)
 }
