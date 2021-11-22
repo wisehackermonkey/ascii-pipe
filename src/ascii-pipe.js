@@ -1,61 +1,29 @@
-// main code
-// let acornLoose = require("acorn-loose");
+// main code 
 const moo = require("moo");
+const fetch = (...args) => import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
-let tokenNames = {
-    newline: "\n",
-    arrow: "=>",
-    block: "|",//https://regexr.com/69ouf
-    out_arrow: "=>    ",
-    // id:{ match: / (?:\=\>\||\=\>|[\|]|[\t]|[\s]{4}|[\s]|\w+|\n)/, lineBreaks: true },
-    func_name: "fn",
-}
 
 const lexer = moo.compile({
     newline: { match: /(?:\r\n?|\n)+/, lineBreaks: true },
     blank: /[\t ]+/,//includes tabs and spaces
     arrow: /(?:\=\>)/,
     block: /[|]/,//https://regexr.com/69ouf
-    // id:{ match: / (?:\=\>\||\=\>|[\|]|[\t]|[\s]{4}|[\s]|\w+|\n)/, lineBreaks: true },
     function_name: /[a-zA-Z0-9_]+/,
-
-    // out: /(?:\=\>)[\t ]*?(?:[a-zA-Z0-9_]+$)/,
-    // word: /[a-z]+/,
-    // times:  /\*|x/
+ 
 });
 
-// const lexerLevel2 = moo.compile({
-// cell: //,
-// arrow: /(?:\=\>)/,
-// block: /[|]/,//https://regexr.com/69ouf
-// out_arrow: /(?:\=\>[\t]|[\s]{4})/,
-// // id:{ match: / (?:\=\>\||\=\>|[\|]|[\t]|[\s]{4}|[\s]|\w+|\n)/, lineBreaks: true },
-// func_name: /[a-zA-Z0-9_]+/,
-// word: /[a-z]+/,
-// times:  /\*|x/
-// });
+
 // pipe(input object, <function or >,[<fn>, <option data>])
 // this returns result of all functions running in a pipe
 const pipe = (firstValue, ...fns) => [...fns].reduce((v, fn) => { if (Array.isArray(fn)) { if (fn.length >= 2) { return fn[0](v, fn[1]) } } return fn(v) }, firstValue)
-const splitColum = (x) => x.split("=>|");
-const splitColumns = (x) => x.split("\n");
-const toRowColumns = (x) => x.map((x) => splitColum(x))
+  
 const print = (x) => console.log(x)
-const printList = (x) => console.log(x.join(""))
-const printJson = (x) => {
+ const printJson = (x) => {
     if (typeof (x) === "object") { console.log(JSON.stringify(x)) } else {
         console.log(x)
     }
     ; return x;
-}
-const tokenPrittyPrint = (x) => {
-
-    print(x.map((y) => {
-        // console.log(tokenNames[y])
-        return y.text
-    }))
-    return x
-}
+} 
 const tokenize = (x) => {
     lexer.reset(x)
     let tokens = []
@@ -68,48 +36,7 @@ const tokenize = (x) => {
     return tokens
 }
 const listTokenTypes = (x) => x.map(x => ({ type: x.type, value: x.text }))
-const printTokenList = (x) => x.map((x) => console.log(x.type))
-
-const locFirstCell = (x) => x.indexOf("|")
-
-const splitRowsCols = (x) => {
-    lines = x.split("newline")
-    lines = lines.x.map()
-    longest =
-        result = []
-    return result
-}
-let examples = [
-    "",
-    `name=>|guessname=>|=>results
-input=>|fn0=>|=>output`,
-    `input=>|fn0=>|=>output`,
-
-    `
-Input|fn8|=>|
-fn|f3`,
-    `Input=>|    fn8=>|    f3=>|=>    ou2_t
-    `,
-    `Input=>|fn8=>|f3=>|=>    ou2_t`,
-    `input=>|`,
-
-    `    
-Input=>|fn8=>|f3=>|=>out
-Input=>|fn8=>|f3=>|=>out`,
-    `
-Input=>|fn8=>|  =>|=>out
-Input=>|fn8=>|f3=>|=>out`,
-    `
-		|	fn2	 =>			 =>|		 
-input =>|	fn1	 =>|	fn8	 =>|=>	out
-		|	fn7	 =>|						
-`
-]
-// pipe(examples[4].replaceAll("\t","    "),splitColumns,toRowColumns, print)
-// pipe(examples[1],splitColum, print)
-// console.log(examples[1].replaceAll("\t", "    "))
-// pipe(examples[1].replaceAll("\t", "    "), tokenize, listTokenTypes, tokenPrittyPrint,printList)
-
+ 
 let countBlocks = (ast) => {
     let counter = 1
     ast.map((x, index) => {
@@ -146,20 +73,8 @@ let countBlockForRows = (rows) => {
     // console.log(maxRows)
     return result
 }
-// example = `name=>|first=>|=>results
-// name2=>|first2=>|=>results2`
-example =
-    `name =>| a =>| b =>| c =>| d=>result
-     name =>| 1 =>| 2 =>| =>result`
-//      |fn1  =>|fn2   =>| fn3=>|fn4=>fn5=>fn6=>|=>output`
-// example = `
-//         |	r2_1	 =>| ___=>|		 
-// in3   =>|	r3_1	 =>| r3_2=>|=>	out
-// `
+ 
 
-// setblockMax = (x) => { ; return x }
-
-counter = 0
 const mapRowColsToDatastructure = (rows) => {
     let blocks = new Array(maxRows).fill([])
     rows.map((row) => {
@@ -181,9 +96,121 @@ const mapRowColsToDatastructure = (rows) => {
             }
         })
         //
-
+        if(row[0].type==="function_name"){
+            blocks = [row[0].type,...blocks]
+        }
     })
     return blocks
 }
-let datastruct = pipe(example, splitNewlines, countBlockForRows, printJson, mapRowColsToDatastructure, print)
 
+
+let convertToAsciiPipe = (formatedAst) => {
+    let evalString = ""
+    input = formatedAst[0]
+    fns = formatedAst[1]
+    output = formatedAst[2]
+   
+
+    evalString = `
+    var asciipipeRun =async()=>{
+    
+    ${output} = await block([
+        [${input}, ${fns.join(",")}]
+    ]);
+        return output
+     }
+ 
+    `
+    return evalString
+}
+
+ 
+let astToPipeArgs = (ast) => {
+    let inputName = ast[0].value//first index has is object containing "input" variable name\
+    let outputName = ast[ast.length - 1].value
+
+
+    let fns = ast[1].map((fn) => {
+        return fn.value
+    })
+    return [inputName, fns, outputName]
+}
+ 
+const astToStandardArrayFormat = (ast) => {
+
+    fnNames = ast.slice(1, -1)
+
+    let result = [ast[0], fnNames, ast[ast.length - 1]]
+    return result
+}
+waitfn = (fn) => {
+    return new Promise((resolve, reject) => {
+        resolve(pipe(...fn))
+    })
+}
+function flatten(ary) {
+    return ary.reduce(function (a, b) {
+        if (Array.isArray(b)) {
+            return a.concat(flatten(b))
+        }
+        return a.concat(b)
+    }, [])
+}
+
+const filtertypes = (x) => {
+    return flatten(x).filter((y) => {
+        return !(y.type === "arrow" || y.type === "block")
+    })
+}
+const parse = (x) => {
+
+    lexer.reset(x)
+    let tokens = []
+    let currentToken = lexer.next()
+    while (currentToken) {
+
+        tokens.push(currentToken)
+        currentToken = lexer.next()
+    }
+
+    return pipe(tokens, listTokenTypes)
+
+}
+const asciipipe = async (dslString) => {
+    return await pipe(dslString, parse, printJson, filtertypes, astToStandardArrayFormat, astToPipeArgs, convertToAsciiPipe, print);
+}
+// example =
+//     `name =>| a =>| b =>| c =>| d=>result
+//      name =>| 1 =>| 2 =>| =>result`
+ 
+// let datastruct = pipe(example, splitNewlines, countBlockForRows, printJson, mapRowColsToDatastructure, print)
+
+
+
+let run4 = async () => {
+    let name = "micheal"
+    let response = ""
+
+    const guessAge = async (name) =>
+        await (await fetch(`https://api.agify.io/?name=${await name}`)).json()
+    const writeToDb = async (apiResponse) => {
+        console.log("Start to db write")
+        return new Promise((resolve, failed) => {
+            setTimeout(() => {
+                console.log("db write: Sucessfull")
+
+                resolve(apiResponse)
+            }, 3000)
+        })
+
+    }
+    let fn7 = async(x) => {
+        return print(x)
+    }
+    result = await asciipipe(`name=>|writeToDb=>|guessAge=>|fn7=>|=>response`)
+    print(result)
+    eval(result)
+    await asciipipeRun()
+    console.log(response)
+}
+run4()

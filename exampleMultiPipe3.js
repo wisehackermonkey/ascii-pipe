@@ -59,40 +59,9 @@ const parse = (x) => {
 
     return pipe(tokens, listTokenTypes)
 
-}
-const uneque = (x) => { return [... new Set(x)] }
-const fnsToDict = (fns) => {
-    let result = {}
-    fns.map(fn => {
-        if (typeof (fn) === "function") {
-            result[fn.name] = fn
-        }
-    })
-    return result
-}
-// [fn1,fn2], {fn: fn1}
-const matchFunctionNames = (x, fns) => {
-    const functionDictonary = fnsToDict(fns)
-    console.log(functionDictonary)
-    return x.map((y) => {
-        print(y)
-        printJson(functionDictonary[y])
-
-        return functionDictonary[y]
-    })
-}
-
-const matchFns = (fnNames, fns) => {
-    let fnDict = fnsToDict(fns)
-    let results = []
-
-    fnNames.map((x) => {
-        results.push(fnDict[x])
-    })
-    return results
-}
-
-const combindOutput = (input) => input.join(", ")
+} 
+ 
+ 
 const astToStandardArrayFormat = (ast) => {
 
     fnNames = ast.slice(1, -1)
@@ -193,13 +162,7 @@ let convertToAsciiPipe = (formatedAst) => {
     input = formatedAst[0]
     fns = formatedAst[1]
     output = formatedAst[2]
-    // let { input, __, output } = formatedAst
-
-    // let functionArrays = fns.map((x)=>{
-    //     return [${input}, ${fns.join(",")}]
-    // }) 
-    // [${input}, ${fns.join(",")}]
-    // ]
+   
 
     evalString = `
     asciipipeRun =async()=>{
