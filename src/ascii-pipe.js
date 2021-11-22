@@ -149,7 +149,8 @@ let countBlockForRows = (rows) => {
 // example = `name=>|first=>|=>results
 // name2=>|first2=>|=>results2`
 example =
-    `name=>|first=>|second=>|=>result `
+    `name =>| a =>| b =>| c =>| d=>result
+     name =>| 1 =>| 2 =>| =>result`
 //      |fn1  =>|fn2   =>| fn3=>|fn4=>fn5=>fn6=>|=>output`
 // example = `
 //         |	r2_1	 =>| ___=>|		 
@@ -159,106 +160,30 @@ example =
 // setblockMax = (x) => { ; return x }
 
 counter = 0
-pipe(example, splitNewlines, countBlockForRows, printJson, (rows) => {
+const mapRowColsToDatastructure = (rows) => {
     let blocks = new Array(maxRows).fill([])
-    let result = rows.map((row) => {//how many times does this run?
+    rows.map((row) => {
 
         let block_number = 0
-        if (row[row.length - 1].type === "function_name" && row[row.length - 2].type === "arrow" && row[row.length - 3].type === "block") {
-            row = row.slice(0, -2)
-        }
-        row = row.filter(x => x.type === "block" || x.type === "function_name")//add for each token
-        print(row)//remove
-        let i = row.findIndex(x => x.type === "block")[0].index//remove for if(block),
-        
-        for (let tokenIndex = i + 1; tokenIndex < row.length - 1 && row[tokenIndex].type !== "block"; tokenIndex++) {
+        //find function names add to array of arrays, do this in a column manner, EX: funtion names of the same column get grouped to gether
+        row.map((token, i) => {
+            if (token.type === "block") {
 
-            if (row[tokenIndex].type === "function_name") {
-                blocks[block_number][0] = row[tokenIndex]//turn back to .push()
-                counter++
-                //     i = row[tokenIndex].index 
+                for (let tokenIndex = i + 1; tokenIndex < row.length - 1 && row[tokenIndex].type !== "block"; tokenIndex++) {
+                    if (row[tokenIndex].type === "function_name") {
+
+
+                        blocks[block_number] = [...blocks[block_number], row[tokenIndex]]//this splat is a weird issue fix with .push()
+                        block_number += 1
+
+                    }
+                }
             }
-        }
-        block_number += 1
+        })
+        //
 
-
-    
     })
-return blocks
-}, console.log)
-console.log(counter)
+    return blocks
+}
+let datastruct = pipe(example, splitNewlines, countBlockForRows, printJson, mapRowColsToDatastructure, print)
 
-
-// console.log(result)
-
-// console.log(blockStartRange)
-
-// forEachRow = (x)=>
-
-// result.map((line, index) => {
-//     // if (line.length === 0) {
-//     //     console.log("line is 0 in length")
-//     //     return
-//     // }
-//     let block_number = 0
-//     // [
-//     //     { type: 'function_name', value: 'name' },
-//     //     { type: 'arrow', value: '=>' },
-//     //     { type: 'block', value: '|', block_num: 1, index: 2 },
-//     //     { type: 'function_name', value: 'first' },
-//     //     { type: 'arrow', value: '=>' },
-//     //     { type: 'block', value: '|', block_num: 2, index: 5 },
-//     //     { type: 'arrow', value: '=>' },
-//     //     { type: 'function_name', value: 'results' }
-//     //   ].map()
-
-//       for (let i = 0; i < line.length; i++) {
-//           const token = line[i];
-
-
-
-//         // printJson(line)
-//         // const token = line[i];
-//         // scan untill you find the start of a block
-//         if (token.type === "block") {
-//             // block_number = token.block_number
-//             // process functions in a block add to block []
-//             let current_token = i +1
-//             console.log(i)
-//             // keep adding any function names untill you get to theend of the block
-//             while (line[current_token] !== undefined && line[current_token].type !== "block") {
-//                 // console.log(current_token)
-//                 if (line[current_token].type === "function_name") {
-//                     blocks[block_number].push(line[current_token])
-//                  }
-//                 // advance a token
-//                 current_token += 1
-//             }
-//             // this is really important, this allows for 
-//             // adding functions via columns instead of rows
-//             block_number += 1
-//             // i= current_token +1
-//             console.log(i)
-
-//         }
-//     }
-
-// })
-
-// current_token = blockStartRange + 1
-// while (result[0][current_token].type !== "block") {
-//     if (result[0][current_token].type === "function_name") {
-//         console.log(result[0][current_token])
-//         buckets[0].push(result[0][current_token])
-
-//     }
-//     current_token++
-// }
-// console.log(current_token)
-// console.log(result[0][current_token])
-
-
-// let datastruct = [
-//     [fn,fn
-//     ]
-// ]
