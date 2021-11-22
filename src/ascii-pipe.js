@@ -135,7 +135,7 @@ let maxRows = 0
 let tempMaxRows = []
 
 let setMaxRows = (x) => {
-    tempMaxRows.push(x.filter((t) => t.type == "block").length)
+    tempMaxRows.push(x.filter((t) => t.type == "block").length)//missing ===
     return x
 }
 let countBlockForRows = (rows) => {
@@ -161,20 +161,20 @@ example =
 counter = 0
 pipe(example, splitNewlines, countBlockForRows, printJson, (rows) => {
     let blocks = new Array(maxRows).fill([])
-    let result = rows.map((row) => {
+    let result = rows.map((row) => {//how many times does this run?
 
         let block_number = 0
         if (row[row.length - 1].type === "function_name" && row[row.length - 2].type === "arrow" && row[row.length - 3].type === "block") {
             row = row.slice(0, -2)
         }
-        row = row.filter(x => x.type === "block" || x.type === "function_name")
-        print(row)
-        let i = row.findIndex(x => x.type === "block")[0].index
+        row = row.filter(x => x.type === "block" || x.type === "function_name")//add for each token
+        print(row)//remove
+        let i = row.findIndex(x => x.type === "block")[0].index//remove for if(block),
         
         for (let tokenIndex = i + 1; tokenIndex < row.length - 1 && row[tokenIndex].type !== "block"; tokenIndex++) {
 
             if (row[tokenIndex].type === "function_name") {
-                blocks[block_number][0] = row[tokenIndex]
+                blocks[block_number][0] = row[tokenIndex]//turn back to .push()
                 counter++
                 //     i = row[tokenIndex].index 
             }
